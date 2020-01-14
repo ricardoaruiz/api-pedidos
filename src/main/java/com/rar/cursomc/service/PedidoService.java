@@ -76,7 +76,7 @@ public class PedidoService {
 		this.itemPedidoRepository.saveAll(pedido.getItens());
 		
 		try {
-			emailService.sendOrderConfirmationEmail(pedido);
+			emailService.sendOrderConfirmationHtmlEmail(pedido);
 		} catch(Exception e) {
 			LOG.error("O email de confirmação do pedido " + pedido.getId() + " não foi enviado.");
 		}
