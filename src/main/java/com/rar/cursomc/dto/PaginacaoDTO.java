@@ -48,10 +48,10 @@ public class PaginacaoDTO implements Serializable {
 	
 	public PageRequest buildRequestPage() {
 		return PageRequest.of(
-				this.page, 
-				this.linesPerPage, 
-				Direction.fromString(this.direction), 
-				this.orderBy);
+				this.getPage(), 
+				this.getLinesPerPage(), 
+				Direction.fromString(this.getDirection()), 
+				this.getOrderBy());
 	}
 	
 }
