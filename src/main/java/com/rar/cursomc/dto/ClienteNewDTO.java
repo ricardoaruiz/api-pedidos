@@ -14,8 +14,8 @@ import com.rar.cursomc.service.validation.ClienteInsert;
 @ClienteInsert
 public class ClienteNewDTO implements Serializable {
 
-	private static final long serialVersionUID = 841314717390560102L;
-	
+	private static final long serialVersionUID = 9182307284149567589L;
+
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Length(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres")
 	private String nome;
@@ -29,6 +29,9 @@ public class ClienteNewDTO implements Serializable {
 	
 	@NotNull(message = "Preenchimento obrigatório")
 	private Integer tipo;
+	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	private String senha;
 	
 	@NotEmpty(message = "Preenchimento obrigatório")
 	private String logradouro;
@@ -80,6 +83,14 @@ public class ClienteNewDTO implements Serializable {
 
 	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public String getLogradouro() {

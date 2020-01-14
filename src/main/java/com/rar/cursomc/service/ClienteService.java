@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,9 @@ public class ClienteService {
 	
 	@Autowired
 	private EnderecoRespository enderecoRespository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncode;
 	
 	/**
 	 * List all clientes
@@ -109,7 +113,7 @@ public class ClienteService {
 	}
 	
 	private Cliente fromDTO(ClienteDTO cliente) {
-		return new Cliente(cliente.getNome(), cliente.getEmail(), null, null);
+		return new Cliente(cliente.getNome(), cliente.getEmail(), null, null, null);
 	}
 	
 	private Cliente fromDTO(ClienteNewDTO clienteNew) {
@@ -118,7 +122,8 @@ public class ClienteService {
 				clienteNew.getNome(), 
 				clienteNew.getEmail(), 
 				clienteNew.getCpfOuCnpj(),
-				TipoCliente.toEnum(clienteNew.getTipo()));
+				TipoCliente.toEnum(clienteNew.getTipo()),
+				this.passwordEncode.encode(clienteNew.getSenha()));
 
 		Optional<Cidade> cidadeOptional = cidadeRepository.findById(clienteNew.getCidade());
 				

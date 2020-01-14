@@ -22,7 +22,7 @@ import com.rar.cursomc.domain.enums.TipoCliente;
 @Entity
 public class Cliente implements Serializable {
 
-	private static final long serialVersionUID = -1754202621664445518L;
+	private static final long serialVersionUID = 6182017057835047142L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,9 @@ public class Cliente implements Serializable {
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+	@JsonIgnore
+	private String senha;
+	
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE)
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
 	
@@ -44,15 +47,16 @@ public class Cliente implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
-	
+		
 	public Cliente() { /* Nothing */ }
 	
-	public Cliente(String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
+	public Cliente(String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
 		super();
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = tipo == null ? null : tipo.getId();
+		this.senha = senha;
 	}
 	
 	public Integer getId() {
@@ -93,6 +97,10 @@ public class Cliente implements Serializable {
 
 	public void setTipo(TipoCliente tipo) {
 		this.tipo = tipo.getId();
+	}
+
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
 	}
 
 	public List<Endereco> getEnderecos() {
