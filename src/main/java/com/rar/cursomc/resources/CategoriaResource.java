@@ -33,7 +33,7 @@ public class CategoriaResource {
 	 * List all categorias
 	 * @return List of categorias
 	 */
-	@GetMapping
+	@GetMapping	
 	public ResponseEntity<List<CategoriaDTO>> listAll() {
 		return ResponseEntity.ok(categoriaService.listAll());
 	}
