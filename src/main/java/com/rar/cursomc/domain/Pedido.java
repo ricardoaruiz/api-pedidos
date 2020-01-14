@@ -1,8 +1,11 @@
 package com.rar.cursomc.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -130,5 +133,28 @@ public class Pedido implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("Pedido número: ");
+		builder.append(getId());
+		builder.append(", instante: ");
+		builder.append(sdf.format(getInstante()));
+		builder.append(", Cliente: ");
+		builder.append(getCliente().getNome());
+		builder.append(", Situação do pagamento: ");
+		builder.append(getPagamento().getEstado().getDescricao());
+		builder.append("\nDetalhes:\n");		
+		this.getItens().stream().forEach(item -> builder.append(item.toString()));
+		builder.append("Valor total: ");
+		builder.append(nf.format(this.getTotal()));		
+		return builder.toString();
+	}
+	
+	
 	
 }

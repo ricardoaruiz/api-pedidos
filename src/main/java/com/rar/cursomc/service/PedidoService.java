@@ -4,9 +4,11 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rar.cursomc.domain.PagamentoComBoleto;
 import com.rar.cursomc.domain.Pedido;
+import com.rar.cursomc.domain.Produto;
 import com.rar.cursomc.domain.enums.EstadoPagamento;
 import com.rar.cursomc.repository.ItemPedidoRespository;
 import com.rar.cursomc.repository.PagamentoRespository;
@@ -23,6 +25,9 @@ public class PedidoService {
 	private PagamentoRespository pagamentoRepository;
 	
 	@Autowired
+	private ClienteService clienteService;
+	
+	@Autowired
 	private ProdutoService produtoService;
 	
 	@Autowired
@@ -31,16 +36,21 @@ public class PedidoService {
 	@Autowired
 	private BoletoService boletoService;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	public Pedido load(Integer id) {
 		return this.pedidoRespository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException(
 						"Recurso não existente com Id " + id + ", Nome: " + Pedido.class.getName()));
 	}
 
+	@Transactional
 	public Pedido insert(Pedido pedido) {
 
 		pedido.setId(null);
 		pedido.setInstante(new Date());
+		pedido.setCliente(clienteService.load(pedido.getCliente().getId()));
 		pedido.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		pedido.getPagamento().setPedido(pedido);
 		
@@ -53,11 +63,15 @@ public class PedidoService {
 		pagamentoRepository.save(pedido.getPagamento());
 		
 		pedido.getItens().stream().forEach(item -> {
+			Produto produto = produtoService.load(item.getProduto().getId());
+			item.setProduto(produto);
 			item.setDesconto(0.00);
-			item.setPreco(produtoService.load(item.getProduto().getId()).getPreco());
+			item.setPreco(produto.getPreco());
 			item.setPedido(insertedPedido);
 		});
 		this.itemPedidoRepository.saveAll(pedido.getItens());
+		
+		emailService.sendOrderConfirmationEmail(pedido);
 		
 		return pedido;
 	}
