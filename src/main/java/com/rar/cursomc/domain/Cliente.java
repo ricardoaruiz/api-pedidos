@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -17,12 +18,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rar.cursomc.domain.enums.Perfil;
 import com.rar.cursomc.domain.enums.TipoCliente;
 
 @Entity
 public class Cliente implements Serializable {
-
-	private static final long serialVersionUID = 6182017057835047142L;
+	
+	private static final long serialVersionUID = -4075502202637943420L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +46,17 @@ public class Cliente implements Serializable {
 	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<String>();
 	
+	@ElementCollection
+	@CollectionTable(name = "PERFIL")
+	private Set<Integer> perfis = new HashSet<>();
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
 		
-	public Cliente() { /* Nothing */ }
+	public Cliente() { 
+		this.perfis.add(Perfil.CLIENTE.getId());
+	}
 	
 	public Cliente(String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
 		super();
@@ -57,6 +65,7 @@ public class Cliente implements Serializable {
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = tipo == null ? null : tipo.getId();
 		this.senha = senha;
+		this.perfis.add(Perfil.CLIENTE.getId());
 	}
 	
 	public Integer getId() {
@@ -117,6 +126,15 @@ public class Cliente implements Serializable {
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+	
+	public Set<Perfil> getPerfis() {
+		return perfis.stream()
+				.map(perfil -> Perfil.toEnum(perfil)).collect(Collectors.toSet());
+	}
+
+	public void addPerfil(Perfil perfis) {
+		this.perfis.add(perfis.getId());
 	}
 
 	public List<Pedido> getPedidos() {

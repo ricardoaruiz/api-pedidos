@@ -22,45 +22,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private Environment env;
-		
-	public static final String[] PUBLIC_MATCHERS = {
-		"/h2-console/**"
-	};
-	
-	public static final String[] PUBLIC_MATCHERS_GET = {
-			"/produtos/**",
-			"/categorias/**"		
-		};	
+
+	public static final String[] PUBLIC_MATCHERS = { "/h2-console/**" };
+
+	public static final String[] PUBLIC_MATCHERS_GET = { "/produtos/**", "/categorias/**" };
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
 		// For H2 console access
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable();
 		}
-		
-		http.cors()
-			.and().csrf().disable();
-		
-		http.authorizeRequests()
-			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
-			.antMatchers(PUBLIC_MATCHERS).permitAll()
-			.anyRequest().authenticated();
-		
+
+		http.cors().and().csrf().disable();
+
+		http.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+				.antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
+
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
-	
+
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
 		return source;
 	}
-	
+
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 }
