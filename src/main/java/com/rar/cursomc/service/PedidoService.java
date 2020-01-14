@@ -2,6 +2,8 @@ package com.rar.cursomc.service;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import com.rar.cursomc.service.exception.ObjectNotFoundException;
 @Service
 public class PedidoService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(PedidoService.class);
+	
 	@Autowired
 	private PedidoRespository pedidoRespository;
 	
@@ -71,7 +75,11 @@ public class PedidoService {
 		});
 		this.itemPedidoRepository.saveAll(pedido.getItens());
 		
-		emailService.sendOrderConfirmationEmail(pedido);
+		try {
+			emailService.sendOrderConfirmationEmail(pedido);
+		} catch(Exception e) {
+			LOG.error("O email de confirmação do pedido " + pedido.getId() + " não foi enviado.");
+		}
 		
 		return pedido;
 	}
