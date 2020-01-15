@@ -24,13 +24,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException(email);
 		}
 		
-		UserSS user = new UserSS(
+		return new UserSS(
 				cliente.getId(), 
 				cliente.getEmail(), 
 				cliente.getSenha(), 
 				cliente.getPerfis());
-		
-		return user;
 	}
 
 }

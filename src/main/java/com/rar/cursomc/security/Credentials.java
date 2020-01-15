@@ -2,7 +2,7 @@ package com.rar.cursomc.security;
 
 import java.io.Serializable;
 
-public class CredenciaisDTO implements Serializable {
+public class Credentials implements Serializable {
 
 	private static final long serialVersionUID = 8050387458970865529L;
 
@@ -10,7 +10,7 @@ public class CredenciaisDTO implements Serializable {
 	
 	private String senha;
 
-	public CredenciaisDTO() { }
+	public Credentials() { }
 	
 	public String getEmail() {
 		return email;

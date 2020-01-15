@@ -22,9 +22,7 @@ public class UserSS implements UserDetails {
 	
 	private Collection<? extends GrantedAuthority> authorities;
 	
-	public UserSS() {
-
-	}
+	public UserSS() { /*Nothing*/ }
 	
 	public UserSS(Integer id, String email, String senha, Set<Perfil> perfis) {
 		super();
@@ -32,7 +30,8 @@ public class UserSS implements UserDetails {
 		this.email = email;
 		this.senha = senha;
 		this.authorities = perfis.stream()
-				.map(perfil -> new SimpleGrantedAuthority(perfil.getDescricao())).collect(Collectors.toList());
+				.map(perfil -> new SimpleGrantedAuthority(
+						perfil.getDescricao())).collect(Collectors.toList());
 	}
 
 	public Integer getId() {

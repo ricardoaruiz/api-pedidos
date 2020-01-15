@@ -1,4 +1,4 @@
-package com.rar.cursomc.config;
+package com.rar.cursomc.security;
 
 import java.util.Arrays;
 
@@ -18,9 +18,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.rar.cursomc.security.JWTAuthenticationFilter;
-import com.rar.cursomc.security.JWTUtil;
-
+/**
+ * Spring Security generate a end point http://host/login that receive Credentials.class on pay load *
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -46,14 +46,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			http.headers().frameOptions().disable();
 		}
 
-		http.cors().and().csrf().disable();
+		/**
+		 * Config CORS and CSRF
+		 */
+		http.cors()
+			.and()
+			.csrf().disable();
 
-		http.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
-				.antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
+		/**
+		 * Set urls in security control
+		 */
+		http.authorizeRequests()
+			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+			.antMatchers(PUBLIC_MATCHERS).permitAll()
+			.anyRequest().authenticated();
 
 		// Add filter for authentication
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 		
+		// Add filter for authorization
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
+		
+		// Add policy for stateless session
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	
@@ -67,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	/**
 	 * Configure Cors origin
-	 * @return
+	 * @return CorsConfigurationSource
 	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
@@ -78,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	/**
 	 * Password encoder
-	 * @return
+	 * @return BCryptPasswordEncoder
 	 */
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
