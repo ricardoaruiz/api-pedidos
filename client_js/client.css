@@ -1,0 +1,13 @@
+section {
+    border-bottom: 1px solid rgba(0,0,0,.4);
+}
+form {
+    display: grid;
+}
+form *  {
+    margin-bottom: 10px;
+}
+.token {
+    font-size: .8rem;
+    font-weight: 400;
+}

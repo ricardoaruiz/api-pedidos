@@ -69,6 +69,11 @@ public class ClienteResource {
 		return ResponseEntity.ok(this.clienteService.load(id));
 	}
 	
+	@GetMapping(value = "/logged")
+	public ResponseEntity<Cliente> loggedClient() {
+		return ResponseEntity.ok(this.clienteService.getLogged());
+	}
+	
 	/*
 	 * Create a new Cliente
 	 */

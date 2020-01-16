@@ -78,6 +78,15 @@ public class ClienteService {
 		return this.clienteRespository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("O objeto com ID " + id + " não foi encontrado, Tipo " + Cliente.class.getName()));
 	}
+	
+	/**
+	 * Get logged client
+	 * @return Client
+	 */
+	public Cliente getLogged() {
+		User authenticated = UserService.authenticated();
+		return this.load(authenticated.getId());
+	}
 		
 	/**
 	 * Create a new cliente
