@@ -1,4 +1,4 @@
-package com.rar.cursomc.security;
+package com.rar.cursomc.security.domain;
 
 import java.util.Collection;
 import java.util.Set;
@@ -8,9 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.rar.cursomc.domain.enums.Perfil;
+import com.rar.cursomc.security.domain.enums.Profile;
 
-public class UserSS implements UserDetails {
+public class User implements UserDetails {
 
 	private static final long serialVersionUID = 573745692732325930L;
 
@@ -22,16 +22,16 @@ public class UserSS implements UserDetails {
 	
 	private Collection<? extends GrantedAuthority> authorities;
 	
-	public UserSS() { /*Nothing*/ }
+	public User() { /*Nothing*/ }
 	
-	public UserSS(Integer id, String email, String senha, Set<Perfil> perfis) {
+	public User(Integer id, String email, String senha, Set<Profile> perfis) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.senha = senha;
 		this.authorities = perfis.stream()
 				.map(perfil -> new SimpleGrantedAuthority(
-						perfil.getDescricao())).collect(Collectors.toList());
+						perfil.getDescription())).collect(Collectors.toList());
 	}
 
 	public Integer getId() {
@@ -73,4 +73,8 @@ public class UserSS implements UserDetails {
 		return true;
 	}
 
+	public boolean hasHole(Profile admin) {
+		return this.authorities
+				.contains(new SimpleGrantedAuthority(admin.getDescription()));
+	}
 }

@@ -20,7 +20,6 @@ import com.rar.cursomc.domain.PagamentoComCartao;
 import com.rar.cursomc.domain.Pedido;
 import com.rar.cursomc.domain.Produto;
 import com.rar.cursomc.domain.enums.EstadoPagamento;
-import com.rar.cursomc.domain.enums.Perfil;
 import com.rar.cursomc.domain.enums.TipoCliente;
 import com.rar.cursomc.repository.CategoriaRepository;
 import com.rar.cursomc.repository.CidadeRepository;
@@ -31,6 +30,7 @@ import com.rar.cursomc.repository.ItemPedidoRespository;
 import com.rar.cursomc.repository.PagamentoRespository;
 import com.rar.cursomc.repository.PedidoRespository;
 import com.rar.cursomc.repository.ProdutoRespository;
+import com.rar.cursomc.security.domain.enums.Profile;
 
 @Service
 public class DBService {
@@ -211,12 +211,12 @@ public void instantiateTestDatabase() throws ParseException {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
-		Cliente cli1 = new Cliente("Maria Silva", "rruiz.padtec@gmail.com", "36378912377", TipoCliente.PESSOA_FISICA, this.passwordEncode.encode("123"));		
+		Cliente cli1 = new Cliente("Maria Silva", "cliente@email.com", "36378912377", TipoCliente.PESSOA_FISICA, this.passwordEncode.encode("123"));		
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
 		
-		Cliente cli2 = new Cliente("Ana Costa", "nelio.iftm@gmail.com", "31628382740", TipoCliente.PESSOA_FISICA, this.passwordEncode.encode("123"));
+		Cliente cli2 = new Cliente("Ana Costa", "admin@email.com", "31628382740", TipoCliente.PESSOA_FISICA, this.passwordEncode.encode("123"));
 		cli2.getTelefones().addAll(Arrays.asList("93883321", "34252625"));
-		cli2.addPerfil(Perfil.ADMIN);
+		cli2.addPerfil(Profile.ADMIN);
 		
 		Endereco e1 = new Endereco("Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, c1);
 		Endereco e2 = new Endereco("Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);

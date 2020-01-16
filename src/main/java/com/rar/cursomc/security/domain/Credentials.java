@@ -1,4 +1,4 @@
-package com.rar.cursomc.security;
+package com.rar.cursomc.security.domain;
 
 import java.io.Serializable;
 

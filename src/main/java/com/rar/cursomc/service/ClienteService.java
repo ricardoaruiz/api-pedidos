@@ -21,6 +21,10 @@ import com.rar.cursomc.dto.PaginacaoDTO;
 import com.rar.cursomc.repository.CidadeRepository;
 import com.rar.cursomc.repository.ClienteRespository;
 import com.rar.cursomc.repository.EnderecoRespository;
+import com.rar.cursomc.security.domain.User;
+import com.rar.cursomc.security.domain.enums.Profile;
+import com.rar.cursomc.security.exception.AuthorizationException;
+import com.rar.cursomc.security.service.UserService;
 import com.rar.cursomc.service.exception.DataIntegrityException;
 import com.rar.cursomc.service.exception.ObjectNotFoundException;
 
@@ -65,6 +69,12 @@ public class ClienteService {
 	 * @return Cliente
 	 */
 	public Cliente load(Integer id) {
+		User authenticated = UserService.authenticated();
+		
+		if (authenticated == null || !authenticated.hasHole(Profile.ADMIN) && !id.equals(authenticated.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		return this.clienteRespository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("O objeto com ID " + id + " não foi encontrado, Tipo " + Cliente.class.getName()));
 	}

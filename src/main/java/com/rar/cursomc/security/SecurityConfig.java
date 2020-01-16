@@ -19,6 +19,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.rar.cursomc.security.filter.JWTAuthenticationFilter;
+import com.rar.cursomc.security.filter.JWTAuthorizationFilter;
+import com.rar.cursomc.security.utils.JWTUtil;
+
 /**
  * Spring Security generate a end point http://host/login that receive Credentials.class on pay load *
  */

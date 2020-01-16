@@ -19,8 +19,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rar.cursomc.domain.enums.Perfil;
 import com.rar.cursomc.domain.enums.TipoCliente;
+import com.rar.cursomc.security.domain.enums.Profile;
 
 @Entity
 public class Cliente implements Serializable {
@@ -56,7 +56,7 @@ public class Cliente implements Serializable {
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
 		
 	public Cliente() { 
-		this.perfis.add(Perfil.CLIENTE.getId());
+		this.perfis.add(Profile.CLIENT.getId());
 	}
 	
 	public Cliente(String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
@@ -66,7 +66,7 @@ public class Cliente implements Serializable {
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = tipo == null ? null : tipo.getId();
 		this.senha = senha;
-		this.perfis.add(Perfil.CLIENTE.getId());
+		this.perfis.add(Profile.CLIENT.getId());
 	}
 	
 	public Integer getId() {
@@ -137,12 +137,12 @@ public class Cliente implements Serializable {
 		this.telefones = telefones;
 	}
 	
-	public Set<Perfil> getPerfis() {
+	public Set<Profile> getPerfis() {
 		return perfis.stream()
-				.map(perfil -> Perfil.toEnum(perfil)).collect(Collectors.toSet());
+				.map(perfil -> Profile.toEnum(perfil)).collect(Collectors.toSet());
 	}
 
-	public void addPerfil(Perfil perfis) {
+	public void addPerfil(Profile perfis) {
 		this.perfis.add(perfis.getId());
 	}
 

@@ -1,4 +1,4 @@
-package com.rar.cursomc.security;
+package com.rar.cursomc.security.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +17,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rar.cursomc.security.domain.Credentials;
+import com.rar.cursomc.security.domain.User;
+import com.rar.cursomc.security.utils.JWTUtil;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -58,7 +61,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		
-		String username = ((UserSS) authResult.getPrincipal()).getUsername();
+		String username = ((User) authResult.getPrincipal()).getUsername();
 		String token = jWTUtil.generateToken(username);
 		response.setHeader("Authorization", "Bearer " + token);
 	}
