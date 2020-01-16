@@ -64,7 +64,7 @@ public class ClienteService {
 	}
 	
 	/**
-	 * Load a cliente
+	 * Load a cliente by id
 	 * @param id
 	 * @return Cliente
 	 */
@@ -80,6 +80,15 @@ public class ClienteService {
 	}
 	
 	/**
+	 * Load a Client by email
+	 * @param email
+	 * @return
+	 */
+	public Cliente load(String email) {
+		return this.clienteRespository.findByEmail(email);
+	}
+	
+	/**
 	 * Get logged client
 	 * @return Client
 	 */
@@ -87,18 +96,27 @@ public class ClienteService {
 		User authenticated = UserService.authenticated();
 		return this.load(authenticated.getId());
 	}
-		
+			
 	/**
 	 * Create a new cliente
-	 * @param cliente
+	 * @param cliente id
 	 */
 	@Transactional
 	public Integer save(ClienteNewDTO clienteNew) {
 		Cliente cliente = this.fromDTO(clienteNew);
+		return this.save(cliente);
+	}
+	
+	/**
+	 * Create a new Cliente
+	 * @param cliente
+	 * @return cliente id
+	 */
+	public Integer save(Cliente cliente) {
 		cliente = this.clienteRespository.save(cliente);
 		this.enderecoRespository.saveAll(cliente.getEnderecos());
-		return cliente.getId();
-	}	
+		return cliente.getId();		
+	}
 
 	/**
 	 * Update a cliente
